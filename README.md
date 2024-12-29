@@ -13,9 +13,7 @@
 ## 使用方法 (for users)
 
 从 [Releases](https://github.com/xiaomu18/Murst/releases/) 中下载最新的构建版本
-
-将 jar 文件放入装好 Fabric loader 的 MC 客户端中
-
+将 jar 文件放入装好 Fabric loader 的 MC 客户端的 mods 文件夹中，然后就可以启动了。
 Then Enjoy it ~
 
 ## Setup (for developers)
