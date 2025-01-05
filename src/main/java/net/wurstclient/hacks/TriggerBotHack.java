@@ -33,7 +33,7 @@ import net.wurstclient.settings.filterlists.EntityFilterList;
 import net.wurstclient.util.EntityUtils;
 
 @SearchTags({"trigger bot", "AutoAttack", "auto attack", "AutoClicker",
-	"auto clicker"})
+	"auto clicker", "tb"})
 public final class TriggerBotHack extends Hack
 	implements PreMotionListener, HandleInputListener
 {

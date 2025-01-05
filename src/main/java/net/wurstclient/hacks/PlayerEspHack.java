@@ -15,7 +15,8 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.wurstclient.settings.CheckboxSetting;
+import net.wurstclient.settings.*;
+import net.wurstclient.settings.SliderSetting.ValueDisplay;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
@@ -39,8 +40,6 @@ import net.wurstclient.events.CameraTransformViewBobbingListener;
 import net.wurstclient.events.RenderListener;
 import net.wurstclient.events.UpdateListener;
 import net.wurstclient.hack.Hack;
-import net.wurstclient.settings.EspBoxSizeSetting;
-import net.wurstclient.settings.EspStyleSetting;
 import net.wurstclient.settings.EspStyleSetting.EspStyle;
 import net.wurstclient.settings.filterlists.EntityFilterList;
 import net.wurstclient.settings.filters.FilterInvisibleSetting;
@@ -51,7 +50,7 @@ import net.wurstclient.util.RegionPos;
 import net.wurstclient.util.RenderUtils;
 import net.wurstclient.util.RotationUtils;
 
-@SearchTags({"player esp", "PlayerTracers", "player tracers"})
+@SearchTags({"player esp", "PlayerTracers", "player tracers", "pe"})
 public final class PlayerEspHack extends Hack implements UpdateListener,
 	CameraTransformViewBobbingListener, RenderListener
 {
@@ -68,6 +67,13 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 
 	private final CheckboxSetting team = new CheckboxSetting("Team", "渲染与队友的连线为蓝色，Box将显示队伍颜色。这在小游戏服务器上很有用。", false);
 
+	private final CheckboxSetting showTeamLine = new CheckboxSetting("Show line to teammate", "不勾选不会显示与队友的连线\n勾选后显示为白色", true);
+
+	private final SliderSetting alpha = new SliderSetting(
+			"Alpha",
+			"在屏幕上渲染的透明度",
+			0.5, 0, 1, 0.01, ValueDisplay.PERCENTAGE);
+
 	private final ArrayList<PlayerEntity> players = new ArrayList<>();
 	
 	public PlayerEspHack()
@@ -78,6 +84,8 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 		addSetting(style);
 		addSetting(boxSize);
 		addSetting(team);
+		addSetting(showTeamLine);
+		addSetting(alpha);
 		entityFilters.forEach(this::addSetting);
 	}
 	
@@ -176,19 +184,19 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 
 					if (tag.contains("color")) {
 						float[] rgb = toRGB(tag.getInt("color"));
-						RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 0.5F);
+						RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], alpha.getValueF());
 					}
 					else{
-						RenderSystem.setShaderColor(1,1, 1, 0.5F);
+						RenderSystem.setShaderColor(1,1, 1, alpha.getValueF());
 					}
 				} else {
-					RenderSystem.setShaderColor(1,1, 1, 0.5F);
+					RenderSystem.setShaderColor(1,1, 1, alpha.getValueF());
 				}
 			}
 			else
 			{
 				float f = MC.player.distanceTo(e) / 20F;
-				RenderSystem.setShaderColor(2 - f, f, 0, 0.5F);
+				RenderSystem.setShaderColor(2 - f, f, 0, alpha.getValueF());
 			}
 			
 			Box bb = new Box(-0.5, 0, -0.5, 0.5, 1, 0.5);
@@ -223,9 +231,13 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 			float r, g, b;
 
 			if (team.isChecked() && isTeammate(e)) {
-				r = 1;
-				g = 1;
-				b = 1;
+				if (showTeamLine.isChecked()) {
+					r = 1;
+					g = 1;
+					b = 1;
+				} else {
+					continue;
+				}
 			}
 			else if(WURST.getFriends().contains(e.getName().getString()))
 			{
@@ -242,11 +254,11 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 			
 			bufferBuilder
 				.vertex(matrix, (float)start.x, (float)start.y, (float)start.z)
-				.color(r, g, b, 0.5F).next();
+				.color(r, g, b, alpha.getValueF()).next();
 			
 			bufferBuilder
 				.vertex(matrix, (float)end.x, (float)end.y, (float)end.z)
-				.color(r, g, b, 0.5F).next();
+				.color(r, g, b, alpha.getValueF()).next();
 		}
 		
 		tessellator.draw();
