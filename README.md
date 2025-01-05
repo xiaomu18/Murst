@@ -3,11 +3,13 @@
 这里是 Wurst Client 的一个魔改版本。
 
 目前更改如下：
-1. 为 TriggerBot 添加 Team(队伍) 选项。开启后不会攻击与你戴相同颜色帽子的玩家。
-2. 为 PlayerESP 添加 Team(队伍) 选项。开启后 Box 将显示为玩家队伍颜色，若无队伍则显示为白色。与队友的连线将显示为白色。
+1. 为 TriggerBot 和 Killaura 添加了 Team(队伍) 功能。开启后不会攻击与你戴相同颜色帽子的玩家。
+2. 为 PlayerESP 添加队伍选项。开启后 Box 将显示为玩家队伍颜色，若无队伍则显示为白色。与队友的连线可显示为白色或不显示。
 3. 为 AimAssist 添加 Team(队伍) 选项。开启后不会瞄准非玩家和队友。
-3. 移除 Wurst Updater
-4. 为游戏内的 Wurst Logo 添加了 Never 选项
+4. 可以调整 PlayerESP 绘制线条的透明度
+5. 增加了 .playerlist 命令，可通过服务端发送的数据查看在线玩家和他人游戏模式
+6. 移除 Wurst Updater
+7. 使 Wurst Logo 处于 Never 显示模式
 
 
 ## 使用方法 (for users)
