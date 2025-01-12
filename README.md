@@ -6,11 +6,11 @@
 目前更改如下：
 1. 添加 Team 功能。开启此功能后将会识别小游戏的玩家队伍
 
-作用域：
-TriggerBot: 不会攻击已识别的队友。
-AimAssist: 只瞄准已识别的敌人。不会攻击非玩家
-Killaura: 只攻击已识别的敌人。不会攻击非玩家
-PlayerESP: Boxes 显示为队伍颜色。队友的 Line 可设置为不显示或显示成白色。
+作用域：  
+TriggerBot: 不会攻击已识别的队友。  
+AimAssist: 只瞄准已识别的敌人。不会攻击非玩家  
+Killaura: 只攻击已识别的敌人。不会攻击非玩家  
+PlayerESP: Boxes 显示为队伍颜色。队友的 Line 可设置为不显示或显示成白色。  
 
 4. 可以调整 PlayerESP 绘制线条的透明度
 5. 增加了 .playerlist 命令，可通过服务端发送的数据查看在线玩家和他人游戏模式
