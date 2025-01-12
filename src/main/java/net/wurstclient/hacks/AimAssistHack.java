@@ -59,8 +59,6 @@ public final class AimAssistHack extends Hack
 		new CheckboxSetting("Check line of sight",
 			"description.wurst.setting.aimassist.check_line_of_sight", true);
 
-	private final CheckboxSetting team = new CheckboxSetting("Team", "不会瞄准非玩家和头戴相同颜色皮革帽子的玩家。\n人话: 不瞄准队友和非玩家\n这在小游戏服务器上十分有用。", false);
-	
 	private final CheckboxSetting aimWhileBlocking =
 		new CheckboxSetting("Aim while blocking",
 			"description.wurst.setting.aimassist.aim_while_blocking", false);
@@ -109,7 +107,6 @@ public final class AimAssistHack extends Hack
 		addSetting(aimAt);
 		addSetting(ignoreMouseInput);
 		addSetting(checkLOS);
-		addSetting(team);
 		addSetting(aimWhileBlocking);
 		
 		entityFilters.forEach(this::addSetting);
@@ -183,35 +180,19 @@ public final class AimAssistHack extends Hack
 		double rangeSq = range.getValueSq();
 		stream = stream.filter(e -> MC.player.squaredDistanceTo(e) <= rangeSq);
 
-		if (team.isChecked())
+		if (WURST.getHax().teamHack.isEnabled())
 			stream = stream.filter(e -> {
 				if (!(e instanceof PlayerEntity))
 					return false;
 
-				PlayerEntity playerEntity = (PlayerEntity) e;
-				ItemStack helmet = playerEntity.getEquippedStack(EquipmentSlot.HEAD);
-				ItemStack myhelmet = MC.player.getEquippedStack(EquipmentSlot.HEAD);
-
-				// 检查是否是皮革头盔
-				if (helmet.getItem() == Items.LEATHER_HELMET && myhelmet.getItem() == Items.LEATHER_HELMET) {
-					NbtCompound tag = helmet.getOrCreateSubNbt("display");
-					NbtCompound mytag = myhelmet.getOrCreateSubNbt("display");
-
-					// 检查染色标签是否一致
-					if (tag.contains("color") && mytag.contains("color")) {
-						return tag.getInt("color") != mytag.getInt("color");
-					}
-				}
-
-				return true;
+				return WURST.getHax().teamHack.isOpponent((PlayerEntity) e);
 			});
 		
 		if(fov.getValue() < 360.0)
 			stream = stream.filter(e -> RotationUtils.getAngleToLookVec(
 				aimAt.getAimPoint(e)) <= fov.getValue() / 2.0);
 
-		if (!team.isChecked())
-			stream = entityFilters.applyTo(stream);
+		stream = entityFilters.applyTo(stream);
 		
 		target = stream
 			.min(Comparator.comparingDouble(

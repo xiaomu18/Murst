@@ -133,9 +133,9 @@ public class WurstOptionsScreen extends Screen
 		
 		new WurstOptionsButton(54, 96, () -> "Murst",
 				"§d§lMurst 版本信息\n"
-					+ "§e版本: §fMurst v1.03.12\n"
+					+ "§e版本: §fMurst v1.04.35\n"
 					+ "§e适用版本: §fMinecraft 1.20.4\n"
-					+ "§e发布时间: §f2024-12-21 14:00\n"
+					+ "§e发布时间: §f2025-1-2 14:00\n"
 					+ "§e基带: §fWurst v7.46.1-MC1.20.4\n",
 			b -> {});
 		

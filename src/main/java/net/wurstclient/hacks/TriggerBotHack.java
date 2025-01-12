@@ -63,8 +63,6 @@ public final class TriggerBotHack extends Hack
 				+ " \"Simulate mouse click\" is enabled.",
 			false);
 
-	private final CheckboxSetting team = new CheckboxSetting("Team", "不攻击戴着与你相同颜色的皮革帽子的玩家\n这在小游戏服务器上十分有用。", false);
-	
 	private final CheckboxSetting simulateMouseClick = new CheckboxSetting(
 		"Simulate mouse click",
 		"Simulates an actual mouse click (or key press) when attacking. Can be"
@@ -91,7 +89,6 @@ public final class TriggerBotHack extends Hack
 		addSetting(speedRandMS);
 		addSetting(swingHand);
 		addSetting(attackWhileBlocking);
-		addSetting(team);
 		addSetting(simulateMouseClick);
 		
 		entityFilters.forEach(this::addSetting);
@@ -185,23 +182,8 @@ public final class TriggerBotHack extends Hack
 		if(MC.player.squaredDistanceTo(entity) > range.getValueSq())
 			return false;
 
-		if (team.isChecked() && entity instanceof PlayerEntity) {
-			PlayerEntity playerEntity = (PlayerEntity) entity;
-			ItemStack helmet = playerEntity.getEquippedStack(EquipmentSlot.HEAD);
-			ItemStack myhelmet = MC.player.getEquippedStack(EquipmentSlot.HEAD);
-
-			// 检查是否是皮革头盔
-			if (helmet.getItem() == Items.LEATHER_HELMET && myhelmet.getItem() == Items.LEATHER_HELMET) {
-				NbtCompound tag = helmet.getOrCreateSubNbt("display");
-				NbtCompound mytag = myhelmet.getOrCreateSubNbt("display");
-
-				// 检查染色标签是否一致
-				if (tag.contains("color") && mytag.contains("color")) {
-					return tag.getInt("color") != mytag.getInt("color");
-				}
-			}
-
-			return true;
+		if (WURST.getHax().teamHack.isEnabled() && entity instanceof PlayerEntity) {
+			return !WURST.getHax().teamHack.isTeammate((PlayerEntity) entity);
 		}
 
 		return entityFilters.testOne(entity);

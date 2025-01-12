@@ -1,11 +1,17 @@
 # Murst Client
 
 这里是 Wurst Client 的一个魔改版本。
+致力于使 Wurst Client 的功能适应小游戏服务器
 
 目前更改如下：
-1. 为 TriggerBot 和 Killaura 添加了 Team(队伍) 功能。开启后不会攻击与你戴相同颜色帽子的玩家。
-2. 为 PlayerESP 添加队伍选项。开启后 Box 将显示为玩家队伍颜色，若无队伍则显示为白色。与队友的连线可显示为白色或不显示。
-3. 为 AimAssist 添加 Team(队伍) 选项。开启后不会瞄准非玩家和队友。
+1. 添加 Team 功能。开启此功能后将会识别小游戏的玩家队伍
+
+作用域：
+TriggerBot: 不会攻击已识别的队友。
+AimAssist: 只瞄准已识别的敌人。不会攻击非玩家
+Killaura: 只攻击已识别的敌人。不会攻击非玩家
+PlayerESP: Boxes 显示为队伍颜色。队友的 Line 可设置为不显示或显示成白色。
+
 4. 可以调整 PlayerESP 绘制线条的透明度
 5. 增加了 .playerlist 命令，可通过服务端发送的数据查看在线玩家和他人游戏模式
 6. 移除 Wurst Updater

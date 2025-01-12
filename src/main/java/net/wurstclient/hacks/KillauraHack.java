@@ -89,8 +89,6 @@ public final class KillauraHack extends Hack
 		"Renders a colored box within the target, inversely proportional to its remaining health.",
 		true);
 
-	private final CheckboxSetting team = new CheckboxSetting("Team", "开启后，针对玩家，只攻击其他队伍的玩家。\n若无法识别队伍，则不攻击。对于非玩家，无限制。\n这在小游戏服务器上十分有用。", false);
-
 	private final PauseAttackOnContainersSetting pauseOnContainers =
 		new PauseAttackOnContainersSetting(true);
 	
@@ -118,7 +116,6 @@ public final class KillauraHack extends Hack
 		addSetting(fov);
 		addSetting(swingHand);
 		addSetting(damageIndicator);
-		addSetting(team);
 		addSetting(pauseOnContainers);
 		addSetting(checkLOS);
 		
@@ -174,27 +171,12 @@ public final class KillauraHack extends Hack
 			stream = stream.filter(e -> RotationUtils.getAngleToLookVec(
 				e.getBoundingBox().getCenter()) <= fov.getValue() / 2.0);
 
-		if (team.isChecked())
+		if (WURST.getHax().teamHack.isEnabled())
 			stream = stream.filter(e -> {
 				if (!(e instanceof PlayerEntity))
 					return true;
 
-				PlayerEntity playerEntity = (PlayerEntity) e;
-				ItemStack helmet = playerEntity.getEquippedStack(EquipmentSlot.HEAD);
-				ItemStack myhelmet = MC.player.getEquippedStack(EquipmentSlot.HEAD);
-
-				// 检查是否是皮革头盔
-				if (helmet.getItem() == Items.LEATHER_HELMET && myhelmet.getItem() == Items.LEATHER_HELMET) {
-					NbtCompound tag = helmet.getOrCreateSubNbt("display");
-					NbtCompound mytag = myhelmet.getOrCreateSubNbt("display");
-
-					// 检查染色标签是否一致
-					if (tag.contains("color") && mytag.contains("color")) {
-						return tag.getInt("color") != mytag.getInt("color");
-					}
-				}
-
-				return false;
+				return WURST.getHax().teamHack.isOpponent((PlayerEntity) e);
 			});
 		
 		stream = entityFilters.applyTo(stream);

@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.wurstclient.settings.*;
 import net.wurstclient.settings.SliderSetting.ValueDisplay;
 import org.joml.Matrix4f;
@@ -65,9 +61,7 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 		new FilterSleepingSetting("Won't show sleeping players.", false),
 		new FilterInvisibleSetting("Won't show invisible players.", false));
 
-	private final CheckboxSetting team = new CheckboxSetting("Team", "渲染与队友的连线为蓝色，Box将显示队伍颜色。这在小游戏服务器上很有用。", false);
-
-	private final CheckboxSetting showTeamLine = new CheckboxSetting("Show line to teammate", "不勾选不会显示与队友的连线\n勾选后显示为白色", true);
+	private final CheckboxSetting showTeamLine = new CheckboxSetting("Show line to teammate", "不勾选不会显示与队友的连线\n勾选后显示为白色。\n当 TeamHack 开启时生效", true);
 
 	private final SliderSetting alpha = new SliderSetting(
 			"Alpha",
@@ -83,7 +77,6 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 		
 		addSetting(style);
 		addSetting(boxSize);
-		addSetting(team);
 		addSetting(showTeamLine);
 		addSetting(alpha);
 		entityFilters.forEach(this::addSetting);
@@ -176,21 +169,14 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 				e.getHeight() + extraSize, e.getWidth() + extraSize);
 			
 			// set color
-			if (team.isChecked()) {
-				ItemStack helmet = e.getEquippedStack(EquipmentSlot.HEAD);
+			if (WURST.getHax().teamHack.isEnabled()) {
+				Integer color = WURST.getHax().teamHack.getTeamColor(e);
 
-				if (helmet.getItem() == Items.LEATHER_HELMET) {
-					NbtCompound tag = helmet.getOrCreateSubNbt("display");
-
-					if (tag.contains("color")) {
-						float[] rgb = toRGB(tag.getInt("color"));
-						RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], alpha.getValueF());
-					}
-					else{
-						RenderSystem.setShaderColor(1,1, 1, alpha.getValueF());
-					}
-				} else {
+				if (color == null) {
 					RenderSystem.setShaderColor(1,1, 1, alpha.getValueF());
+				} else {
+					float[] RGB = WURST.getHax().teamHack.toRGB(color);
+					RenderSystem.setShaderColor(RGB[0],RGB[1], RGB[2], alpha.getValueF());
 				}
 			}
 			else
@@ -230,7 +216,7 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 			
 			float r, g, b;
 
-			if (team.isChecked() && isTeammate(e)) {
+			if (WURST.getHax().teamHack.isEnabled() && WURST.getHax().teamHack.isTeammate(e)) {
 				if (showTeamLine.isChecked()) {
 					r = 1;
 					g = 1;
@@ -262,32 +248,5 @@ public final class PlayerEspHack extends Hack implements UpdateListener,
 		}
 		
 		tessellator.draw();
-	}
-
-	private boolean isTeammate(PlayerEntity playerEntity){
-		ItemStack helmet = playerEntity.getEquippedStack(EquipmentSlot.HEAD);
-		ItemStack myhelmet = MC.player.getEquippedStack(EquipmentSlot.HEAD);
-
-		// 检查是否是皮革头盔
-		if (helmet.getItem() == Items.LEATHER_HELMET && myhelmet.getItem() == Items.LEATHER_HELMET) {
-			NbtCompound tag = helmet.getOrCreateSubNbt("display");
-			NbtCompound mytag = myhelmet.getOrCreateSubNbt("display");
-
-			// 检查染色标签是否一致
-			if (tag.contains("color") && mytag.contains("color")) {
-				return tag.getInt("color") == mytag.getInt("color");
-			}
-		}
-
-		return false;
-	}
-
-	private float[] toRGB(int color) {
-		// 将颜色值转换为 0 到 255 的红、绿、蓝三个分量
-		float red = ((color >> 16) & 0xFF) / 255.0f;
-		float green = ((color >> 8) & 0xFF) / 255.0f;
-		float blue = (color & 0xFF) / 255.0f;
-
-		return new float[]{red, green, blue};
 	}
 }
