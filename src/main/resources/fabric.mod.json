@@ -1,20 +1,14 @@
 {
   "schemaVersion": 1,
   "id": "murst",
-  "version": "${version}",
-  "name": "Murst Client",
-  "description": "I'm the advanced Wurst Pro Max",
+  "version": "1.04.89",
+  "name": "Murst",
+  "description": "Practical visual and functional optimization",
   "authors": [
     "Alexander01998",
     "xiaomu18"
   ],
-  "contact": {
-    "homepage": "https://www.wurstclient.net/?utm_source=Wurst+Client&utm_medium=ModMenu&utm_content=Website",
-    "issues": "https://www.wurstclient.net/wurst7issues/",
-    "sources": "https://www.wurstclient.net/wurst7sources/"
-  },
   "license": "GPL-3.0-or-later",
-  "icon": "assets/wurst/icon.png",
   "environment": "client",
   "entrypoints": {
     "main": [
@@ -39,14 +33,5 @@
     "wi-zoom": "*",
     "vulkanmod": "*",
     "sodium": ">=0.6.0-beta.1"
-  },
-  "custom": {
-    "modmenu": {
-      "links": {
-        "Wiki": "https://wurst.wiki/?utm_source=Wurst+Client&utm_medium=ModMenu&utm_content=Wiki",
-        "Forum": "https://wurstforum.net/?utm_source=Wurst+Client&utm_medium=ModMenu&utm_content=Forum",
-        "Donate": "https://www.wurstclient.net/donate/?utm_source=Wurst+Client&utm_medium=ModMenu&utm_content=Donate"
-      }
-    }
   }
 }

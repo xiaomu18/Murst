@@ -18,21 +18,26 @@ import net.wurstclient.settings.CheckboxSetting;
 public final class DisableOtf extends OtherFeature
 {
 	private final CheckboxSetting hideEnableButton = new CheckboxSetting(
-		"Hide enable button",
-		"Removes the \"Enable Wurst\" button as soon as you close the Statistics screen."
+		"Completely disabled",
+		"在禁用 Murst 后不再开放启用通道。彻底禁用 Murst"
 			+ " You will have to restart the game to re-enable Wurst.",
 		false);
+
+	private final CheckboxSetting disableOnStart = new CheckboxSetting(
+			"Disable On Start",
+			"每次启动 Minecraft 时默认使 Murst 处于禁用状态。\n你可以在进入游戏再启用 Murst",
+			false);
 	
 	public DisableOtf()
 	{
-		super("Disable Wurst",
-			"To disable Wurst, go to the Statistics screen and press the \"Disable Wurst\" button.\n"
-				+ "It will turn into an \"Enable Wurst\" button once pressed.");
+		super("Disable Murst", "点击统计信息页面的左上角和右上角分别可以启用、禁用 Murst。");
 		addSetting(hideEnableButton);
+		addSetting(disableOnStart);
 	}
 	
 	public boolean shouldHideEnableButton()
 	{
 		return !WURST.isEnabled() && hideEnableButton.isChecked();
 	}
+	public boolean shouldDisableOnStart() { return disableOnStart.isChecked(); }
 }

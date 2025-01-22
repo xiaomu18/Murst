@@ -66,7 +66,7 @@ public final class ZoomOtf extends OtherFeature implements MouseScrollListener
 		if(currentLevel == null)
 			currentLevel = level.getValue();
 		
-		if(!isZoomKeyPressed())
+		if(!isZoomKeyPressed() || !WURST.isEnabled())
 		{
 			currentLevel = level.getValue();
 			

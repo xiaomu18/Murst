@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 import net.minecraft.client.MinecraftClient;
 import net.wurstclient.altmanager.AltManager;
 import net.wurstclient.altmanager.Encryption;
-import net.wurstclient.analytics.WurstAnalytics;
 import net.wurstclient.clickgui.ClickGui;
 import net.wurstclient.command.CmdList;
 import net.wurstclient.command.CmdProcessor;
@@ -28,7 +27,6 @@ import net.wurstclient.events.GUIRenderListener;
 import net.wurstclient.events.KeyPressListener;
 import net.wurstclient.events.PostMotionListener;
 import net.wurstclient.events.PreMotionListener;
-import net.wurstclient.events.UpdateListener;
 import net.wurstclient.hack.Hack;
 import net.wurstclient.hack.HackList;
 import net.wurstclient.hud.IngameHUD;
@@ -48,10 +46,7 @@ public enum WurstClient
 	public static MinecraftClient MC;
 	public static IMinecraftClient IMC;
 	
-	public static final String VERSION = "7.46.1";
-	public static final String MC_VERSION = "1.20.4";
-	
-	private WurstAnalytics analytics;
+	public static final String VERSION = "1.04.89";
 	private EventManager eventManager;
 	private AltManager altManager;
 	private HackList hax;
@@ -74,16 +69,11 @@ public enum WurstClient
 	
 	public void initialize()
 	{
-		System.out.println("Starting Wurst Client...");
+		System.out.println("Starting Murst v" + VERSION + "...");
 		
 		MC = MinecraftClient.getInstance();
 		IMC = (IMinecraftClient)MC;
 		wurstFolder = createWurstFolder();
-		
-		String trackingID = "UA-52838431-5";
-		String hostname = "client.wurstclient.net";
-		Path analyticsFile = wurstFolder.resolve("analytics.json");
-		analytics = new WurstAnalytics(trackingID, hostname, analyticsFile);
 		
 		eventManager = new EventManager(this);
 		
@@ -132,9 +122,12 @@ public enum WurstClient
 		Path altsFile = wurstFolder.resolve("alts.encrypted_json");
 		Path encFolder = Encryption.chooseEncryptionFolder();
 		altManager = new AltManager(altsFile, encFolder);
-		
-		analytics.trackPageView("/mc" + MC_VERSION + "/v" + VERSION,
-			"Wurst " + VERSION + " MC" + MC_VERSION);
+
+		if (getOtfs().disableOtf.shouldDisableOnStart())
+		{
+			System.out.println("DisableOtf - Auto Disabling Murst...");
+			setEnabled(false);
+		}
 	}
 	
 	private Path createWurstFolder()
@@ -158,11 +151,6 @@ public enum WurstClient
 	public String translate(String key, Object... args)
 	{
 		return translator.translate(key, args);
-	}
-	
-	public WurstAnalytics getAnalytics()
-	{
-		return analytics;
 	}
 	
 	public EventManager getEventManager()
@@ -282,6 +270,8 @@ public enum WurstClient
 	{
 		return enabled;
 	}
+
+	private final ArrayList<Hack> lastDisabledHack = new ArrayList<>();
 	
 	public void setEnabled(boolean enabled)
 	{
@@ -289,8 +279,18 @@ public enum WurstClient
 		
 		if(!enabled)
 		{
-			hax.panicHack.setEnabled(true);
-			hax.panicHack.onUpdate();
+			for(Hack hack : getHax().getAllHax())
+				if(hack.isEnabled())
+				{
+					hack.setEnabled(false, false);
+					lastDisabledHack.add(hack);
+				}
+		}
+		else
+		{
+			for (Hack hack : lastDisabledHack)
+				hack.setEnabled(true, false);
+			lastDisabledHack.clear();
 		}
 	}
 	

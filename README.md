@@ -1,21 +1,22 @@
 # Murst Client
 
-这里是 Wurst Client 的一个魔改版本。
-致力于使 Wurst Client 的功能适应小游戏服务器
+这里是 Wurst Client 的一个魔改版本
+致力于打造适用于小游戏服务器的 Wurst Client
 
 目前更改如下：
 1. 添加 Team 功能。开启此功能后将会识别小游戏的玩家队伍
-
-作用域：  
+ 
 TriggerBot: 不会攻击已识别的队友。  
-AimAssist: 只瞄准已识别的敌人。不会攻击非玩家  
+AimAssist: 只瞄准已识别的敌人。不会瞄准非玩家。  
 Killaura: 只攻击已识别的敌人。不会攻击非玩家  
 PlayerESP: Boxes 显示为队伍颜色。队友的 Line 可设置为不显示或显示成白色。  
 
 4. 可以调整 PlayerESP 绘制线条的透明度
 5. 增加了 .playerlist 命令，可通过服务端发送的数据查看在线玩家和他人游戏模式
-6. 移除 Wurst Updater
-7. 使 Wurst Logo 处于 Never 显示模式
+6. 增强 Disable Wurst，可在启动时自动处于禁用状态，详见功能描述。 
+7. 移除 Wurst Updater (Wurst 1.20.4 已经停止维护)
+8. 移除 Wurst Analytics (Wurst 1.20.4 已经停止维护)
+9. 使 Wurst Logo 处于 Never 显示模式
 
 
 ## 使用方法 (for users)
@@ -35,6 +36,12 @@ Then Enjoy it ~
 ```
 
 2. In Eclipse, go to `Import...` > `Existing Projects into Workspace` and select this project.
+
+## Original Edition Wurst
+
+从这里访问原版的 Wurst
+https://www.wurstclient.net/
+https://github.com/Wurst-Imperium/Wurst7
 
 ## License
 

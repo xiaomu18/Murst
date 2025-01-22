@@ -22,7 +22,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import net.minecraft.util.Util.OperatingSystem;
 import net.wurstclient.WurstClient;
-import net.wurstclient.analytics.WurstAnalytics;
 import net.wurstclient.commands.FriendsCmd;
 import net.wurstclient.hacks.XRayHack;
 import net.wurstclient.other_features.VanillaSpoofOtf;
@@ -57,7 +56,6 @@ public class WurstOptionsScreen extends Screen
 		WurstClient wurst = WurstClient.INSTANCE;
 		FriendsCmd friendsCmd = wurst.getCmds().friendsCmd;
 		CheckboxSetting middleClickFriends = friendsCmd.getMiddleClickFriends();
-		WurstAnalytics analytics = wurst.getAnalytics();
 		VanillaSpoofOtf vanillaSpoofOtf = wurst.getOtfs().vanillaSpoofOtf;
 		CheckboxSetting forceEnglish =
 			wurst.getOtfs().translationsOtf.getForceEnglish();
@@ -70,15 +68,9 @@ public class WurstOptionsScreen extends Screen
 				.setChecked(!middleClickFriends.isChecked()));
 		
 		new WurstOptionsButton(-154, 48,
-			() -> "Count Users: " + (analytics.isEnabled() ? "ON" : "OFF"),
-			"Counts how many people are using Wurst and which versions are the"
-				+ " most popular. We use this data to decide when to stop"
-				+ " supporting old Minecraft versions.\n\n"
-				+ "We use a random ID to tell users apart so that this data can"
-				+ " never be linked to your Minecraft account. The random ID is"
-				+ " changed every 3 days to make extra sure that you remain"
-				+ " anonymous.",
-			b -> analytics.setEnabled(!analytics.isEnabled()));
+			() -> "Count Users: OFF",
+			"Murst 已停止此功能的运行",
+			b -> {});
 		
 		new WurstOptionsButton(-154, 72,
 			() -> "Spoof Vanilla: "
@@ -133,7 +125,7 @@ public class WurstOptionsScreen extends Screen
 		
 		new WurstOptionsButton(54, 96, () -> "Murst",
 				"§d§lMurst 版本信息\n"
-					+ "§e版本: §fMurst v1.04.35\n"
+					+ "§e版本: §fMurst v" + WurstClient.VERSION
 					+ "§e适用版本: §fMinecraft 1.20.4\n"
 					+ "§e发布时间: §f2025-1-2 14:00\n"
 					+ "§e基带: §fWurst v7.46.1-MC1.20.4\n",

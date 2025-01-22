@@ -70,8 +70,16 @@ public abstract class Hack extends Feature
 	{
 		return enabled;
 	}
-	
+
 	public final void setEnabled(boolean enabled)
+	{
+		if(this.enabled == enabled)
+			return;
+
+		setEnabled(enabled, stateSaved && WURST.isEnabled());
+	}
+	
+	public final void setEnabled(boolean enabled, boolean savestate)
 	{
 		if(this.enabled == enabled)
 			return;
@@ -90,7 +98,7 @@ public abstract class Hack extends Feature
 		else
 			onDisable();
 		
-		if(stateSaved)
+		if(savestate)
 			WURST.getHax().saveEnabledHax();
 	}
 	
