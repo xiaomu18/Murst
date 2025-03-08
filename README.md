@@ -13,7 +13,13 @@ PlayerESP: Boxes 显示为队伍颜色。队友的 Line 可设置为不显示或
 
 4. 可以调整 PlayerESP 绘制线条的透明度
 5. 增加了 .playerlist 命令，可通过服务端发送的数据查看在线玩家和他人游戏模式
-6. 增强 Disable Wurst，可在启动时自动处于禁用状态，详见功能描述。 
+6. 增强 Disable Wurst，禁用后变成原版MC，根本无法发现 Murst
+
+修复禁用后还可以使用 Zoom 放大视角的 Bug
+删除统计界面显眼的禁用按钮，点击统计界面左上角禁用，右上角启用，更隐蔽和安全
+现在禁用不会关闭全部功能，禁用再启用后将恢复禁用前开启的功能
+可在启动时自动处于禁用状态，进入游戏后再启用
+
 7. 移除 Wurst Updater (Wurst 1.20.4 已经停止维护)
 8. 移除 Wurst Analytics (Wurst 1.20.4 已经停止维护)
 9. 使 Wurst Logo 处于 Never 显示模式
